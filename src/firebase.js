@@ -24,6 +24,8 @@ import {
   setDoc,
   query,
   onSnapshot,
+  updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -46,37 +48,34 @@ const db = getFirestore(app);
 
 //adds submission to sub
 export async function submitNewPost(subreddit, title) {
-  try {
-    await addDoc(collection(getFirestore(), subreddit), {
-      title: title,
-      content: "content",
-      poster: "poster",
-      votes: 1,
-      replies: [],
-    });
-  } catch (error) {
-    console.error("Error: ", error);
-  }
+  const subRef = doc(db, "subreddits", subreddit);
+  await updateDoc(subRef, {
+    Posts: arrayUnion({
+      Content: null,
+      OP: null,
+      Replies: [],
+      Title: title,
+      Votes: 1,
+      SubmissionTime: serverTimestamp(),
+    }),
+  });
 }
-
-
-
 
 export async function showPosts(subreddit) {
   const querySnapshot = await getDocs(collection(db, subreddit));
-  const posts = document.getElementById('posts')
-  posts.textContent = ""
+  const posts = document.getElementById("posts");
+  posts.textContent = "";
   querySnapshot.forEach((doc) => {
     let data = doc.data();
-    let h1 = document.createElement('h2');
-    let p = document.createElement('p')
-    h1.setAttribute('class', 'posts')
+    let h1 = document.createElement("h2");
+    let p = document.createElement("p");
+    h1.setAttribute("class", "posts");
     h1.textContent = data.title;
-    p.textContent = `Submitted by ${data.poster}`
-    h1.appendChild(p)
-    p.style.fontSize = '10px'
-    posts.appendChild(h1)
-    console.log(data)
+    p.textContent = `Submitted by ${data.poster}`;
+    h1.appendChild(p);
+    p.style.fontSize = "10px";
+    posts.appendChild(h1);
+    console.log(data);
     return data;
   });
 }
@@ -87,3 +86,21 @@ export async function showPosts(subreddit) {
 //     return doc.data();
 //   });
 // }
+
+export async function createNewSubreddit(newSub) {
+  await setDoc(doc(db, "subreddits", newSub), {
+    Posts: [],
+  });
+}
+
+//use this for a new post in the sub collection of reddits
+//  export async function createNewSubreddit(newSub) {
+//   await setDoc(doc(db, "subreddits", newSub), {
+//     Content: null,
+//     OP: null,
+//     Replies: [],
+//     Title: "",
+//     Votes: 1
+//   })
+
+//  }

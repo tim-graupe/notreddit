@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  showPosts } from "../firebase";
+import {  createNewSubreddit, showPosts, submitNewPost } from "../firebase";
 // import { getProfilePicUrl } from "../firebase";
 
 export default function TopNav(props) {
@@ -21,8 +21,9 @@ export default function TopNav(props) {
       <button
         id="signIn-btn"
         onClick={() => {
-          showPosts("hockey");
-          // submitNewPost("hockey", "/playoffsbound/");
+          // showPosts("hockey");
+          // createNewSubreddit('beer')
+          submitNewPost("beer", "I love beer!!");
         }}
       >
         Sign In
