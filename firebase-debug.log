@@ -1,0 +1,32 @@
+[debug] [2022-10-17T22:07:44.770Z] ----------------------------------------------------------------------
+[debug] [2022-10-17T22:07:44.772Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\tgrau\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve --only hosting
+[debug] [2022-10-17T22:07:44.772Z] CLI Version:   11.14.4
+[debug] [2022-10-17T22:07:44.772Z] Platform:      win32
+[debug] [2022-10-17T22:07:44.772Z] Node Version:  v18.7.0
+[debug] [2022-10-17T22:07:44.773Z] Time:          Mon Oct 17 2022 18:07:44 GMT-0400 (Eastern Daylight Time)
+[debug] [2022-10-17T22:07:44.773Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-10-17T22:07:44.872Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-10-17T22:07:44.873Z] > authorizing via signed-in user (tgraupe90@gmail.com)
+[debug] [2022-10-17T22:07:44.873Z] [iam] checking project notreddit-e1231 for permissions ["firebase.projects.get"]
+[debug] [2022-10-17T22:07:44.875Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/notreddit-e1231:testIamPermissions [none]
+[debug] [2022-10-17T22:07:44.875Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/notreddit-e1231:testIamPermissions x-goog-quota-user=projects/notreddit-e1231
+[debug] [2022-10-17T22:07:44.875Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/notreddit-e1231:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-10-17T22:07:45.065Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/notreddit-e1231:testIamPermissions 200
+[debug] [2022-10-17T22:07:45.066Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/notreddit-e1231:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-10-17T22:07:45.066Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231 [none]
+[debug] [2022-10-17T22:07:45.342Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231 200
+[debug] [2022-10-17T22:07:45.342Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231 {"projectId":"notreddit-e1231","projectNumber":"83722013940","displayName":"notreddit","name":"projects/notreddit-e1231","resources":{"hostingSite":"notreddit-e1231","realtimeDatabaseInstance":"notreddit-e1231-default-rtdb","storageBucket":"notreddit-e1231.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_3f8bcf9f-0977-43b1-b239-d9b8722880f4"}
+[debug] [2022-10-17T22:07:45.344Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/notreddit-e1231/sites 
+[debug] [2022-10-17T22:07:45.738Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/notreddit-e1231/sites 200
+[debug] [2022-10-17T22:07:45.738Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/notreddit-e1231/sites {"sites":[{"name":"projects/notreddit-e1231/sites/notreddit-e1231","defaultUrl":"https://notreddit-e1231.web.app","appId":"1:83722013940:web:a50541eb521a73e53d62a1","type":"DEFAULT_SITE"}]}
+[debug] [2022-10-17T22:07:45.739Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231/webApps/1:83722013940:web:a50541eb521a73e53d62a1/config [none]
+[debug] [2022-10-17T22:07:46.229Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231/webApps/1:83722013940:web:a50541eb521a73e53d62a1/config 200
+[debug] [2022-10-17T22:07:46.229Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231/webApps/1:83722013940:web:a50541eb521a73e53d62a1/config {"projectId":"notreddit-e1231","appId":"1:83722013940:web:a50541eb521a73e53d62a1","databaseURL":"https://notreddit-e1231-default-rtdb.firebaseio.com","storageBucket":"notreddit-e1231.appspot.com","locationId":"us-central","apiKey":"AIzaSyBS37--z75XhTfiMEcgh1njPi2cZ4zG0Vw","authDomain":"notreddit-e1231.firebaseapp.com","messagingSenderId":"83722013940"}
+[debug] [2022-10-17T22:07:46.235Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231 [none]
+[debug] [2022-10-17T22:07:46.512Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231 200
+[debug] [2022-10-17T22:07:46.512Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/notreddit-e1231 {"projectId":"notreddit-e1231","projectNumber":"83722013940","displayName":"notreddit","name":"projects/notreddit-e1231","resources":{"hostingSite":"notreddit-e1231","realtimeDatabaseInstance":"notreddit-e1231-default-rtdb","storageBucket":"notreddit-e1231.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_3f8bcf9f-0977-43b1-b239-d9b8722880f4"}
+[info] i  hosting[notreddit-e1231]: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting[notreddit-e1231]: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
+[info] i  hosting: ::1 - - [17/Oct/2022:22:07:54 +0000] "GET / HTTP/1.1" 200 90 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [17/Oct/2022:22:07:54 +0000] \"GET / HTTP/1.1\" 200 90 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0\""}}
+[info] i  hosting: ::1 - - [17/Oct/2022:22:07:54 +0000] "GET /favicon.ico HTTP/1.1" - - "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [17/Oct/2022:22:07:54 +0000] \"GET /favicon.ico HTTP/1.1\" - - \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0\""}}
