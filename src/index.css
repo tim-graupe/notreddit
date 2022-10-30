@@ -19,8 +19,13 @@ code {
   border-right: transparent;
 width: 100%;
 text-align: left;
+}
 
 
+.sub-btns{
+  background-color: black;
+  color: white;
+  border-color: orange;
 }
 
 #title {
@@ -61,4 +66,8 @@ text-align: left;
 
 .posts{
   text-align: left;
+}
+
+#submissionForm{
+  display: none;
 }

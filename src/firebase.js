@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import "firebase/analytics";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -27,6 +26,7 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
+import { displayPosts } from "./functions/displayPosts";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -35,6 +35,7 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyBS37--z75XhTfiMEcgh1njPi2cZ4zG0Vw",
   authDomain: "notreddit-e1231.firebaseapp.com",
+  databaseURL: "https://notreddit-e1231-default-rtdb.firebaseio.com",
   projectId: "notreddit-e1231",
   storageBucket: "notreddit-e1231.appspot.com",
   messagingSenderId: "83722013940",
@@ -42,52 +43,58 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = getFirestore(app);
+export const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
 
 //adds submission to sub
-export async function submitNewPost(subreddit, title) {
+export async function submitNewPost(subreddit, title, content) {
   const subRef = doc(db, "subreddits", subreddit);
+  const form = document.getElementById("submissionForm");
   await updateDoc(subRef, {
     Posts: arrayUnion({
-      Content: null,
+      Content: content,
       OP: null,
       Replies: [],
       Title: title,
       Votes: 1,
-      SubmissionTime: serverTimestamp(),
+      // SubmissionTime: serverTimestamp(),
     }),
   });
+  form.style.display = "none";
 }
 
 export async function showPosts(subreddit) {
-  const querySnapshot = await getDocs(collection(db, subreddit));
-  const posts = document.getElementById("posts");
-  posts.textContent = "";
-  querySnapshot.forEach((doc) => {
-    let data = doc.data();
-    let h1 = document.createElement("h2");
-    let p = document.createElement("p");
-    h1.setAttribute("class", "posts");
-    h1.textContent = data.title;
-    p.textContent = `Submitted by ${data.poster}`;
-    h1.appendChild(p);
-    p.style.fontSize = "10px";
-    posts.appendChild(h1);
-    console.log(data);
-    return data;
-  });
+  const docRef = doc(db, "subreddits", subreddit);
+  const docSnap = await getDoc(docRef);
+  const postArr = [];
+  if (docSnap.exists()) {
+    const posts = document.getElementById("test");
+    posts.textContent = "";
+    let data = docSnap.data().Posts;
+    data.forEach((post) => {
+      displayPosts(post.Title, post.OP, post.Votes, post.Replies);
+      postArr.push(post);
+    });
+  } else {
+    console.log("404");
+  }
+
+  return postArr;
 }
 
-// export async function showPosts(subreddit) {
-//   const querySnapshot = await getDocs(collection(db, subreddit));
-//   querySnapshot.forEach((doc) => {
-//     return doc.data();
-//   });
-// }
+export async function showSubs() {
+  // console.log('yo')
+  let subArr = [];
+  const querySnapshot = await getDocs(collection(db, "subreddits"));
+  querySnapshot.forEach((doc) => {
+    subArr.push(doc);
+  });
 
-export async function createNewSubreddit(newSub) {
+  // return subArr;
+}
+
+export async function createNewSubreddit() {
+  let newSub = prompt("Enter sub name");
   await setDoc(doc(db, "subreddits", newSub), {
     Posts: [],
   });

@@ -1,36 +1,43 @@
-import React, { useState, useEffect } from "react";
-import {  createNewSubreddit, showPosts, submitNewPost } from "../firebase";
-// import { getProfilePicUrl } from "../firebase";
+import React, {  useEffect, useRef, useState } from "react";
+import {
+  createNewSubreddit, showPosts, showSubs
 
-export default function TopNav(props) {
-    const [subPosts, setSubPosts] = useState('dogs')
-    const {posts} = props
-    useEffect(() => {
-        const subLinks = document.getElementsByClassName('subLinks')
-        //somehow make useefect able to call setsubposts to change the display page with respective collection/sub posts
-    })
+} from "../firebase";
+
+
+
+export default function TopNav() {
+
+
+
+
   return (
     <div id="topNav">
       <div id="logo">
         <h1 id="title">Not</h1>
         <h1 id="title2">Reddit</h1>
       </div>
-      <li>
-        
-      </li>
+      <li></li>
+      <button id="signIn-btn">Sign In</button>
       <button
-        id="signIn-btn"
+        className="nav-divs"
         onClick={() => {
-          // showPosts("hockey");
-          // createNewSubreddit('beer')
-          submitNewPost("beer", "I love beer!!");
+          const form = document.getElementById("submissionForm");
+          form.style.display = "block";
         }}
       >
-        Sign In
+        New Post
       </button>
-      <button id="dogs" onClick={() => showPosts('dogs')}>
-        Dogs
+      <button
+        id="new-sub"
+        onClick={() => {
+          createNewSubreddit();
+        }}
+      >
+        Create New Sub
       </button>
+        <div>
+        </div>
     </div>
   );
 }
