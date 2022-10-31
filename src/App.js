@@ -6,6 +6,7 @@ import { db, showPosts } from "./firebase";
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { async } from "@firebase/util";
 import SubList from "./components/showSubList";
+import ShowPost from "./components/showPost";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -36,23 +37,32 @@ function App() {
 
   return (
     <div className="App">
-
-    <div id="sub-nav">
-    {subList.map((sub) => {
-        return (
-          <div id={sub.id} onClick={() => setCurrentSub(sub)}>
-            <SubList Name={sub} />
-          </div>
-        );
-      })}
-    </div>
+      <div id="sub-nav">
+        {subList.map((sub) => {
+          return (
+            <div id={sub.id} onClick={() => setCurrentSub(sub)}>
+              <SubList Name={sub} />
+            </div>
+          );
+        })}
+      </div>
       <TopNav />
       {posts.map((post) => {
         return (
-          <div key={post.Title}>
+          <div
+            key={post.Title}
+            onClick={() => (
+              console.log(post),
+              <ShowPost
+                Title={post.Title}
+                Content={post.Content}
+                OP={post.OP}
+                Votes={post.Votes}
+              />
+            )}
+          >
             <CurrentSubPosts
               Title={post.Title}
-              Content={post.Content}
               OP={post.OP}
               Votes={post.Votes}
             />
