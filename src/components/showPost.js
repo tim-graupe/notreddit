@@ -8,7 +8,7 @@ export default function ShowPost(Title, Content, OP){
         <div id="post-background">
             <h4>{Title}</h4>
             <p id="post-content">{Content}</p>
-            <p>Submitted by: {OP}</p>
+            <p>{OP}</p>
         </div>
     )
 }

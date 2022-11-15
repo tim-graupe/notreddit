@@ -1,9 +1,10 @@
-export function displayPosts(title, OP, votes, comments) {
-    const posts = document.getElementById('test')
+export function displayPosts(title, OP, votes, content) {
+    const posts = document.getElementById('post')
     // posts.textContent = "";
     const div = document.createElement('div');
+    div.textContent = content
     //title
-    const header = document.createElement('h4');
+    const header = document.createElement('h1');
     header.textContent = title;
 
     //submitted by
@@ -15,12 +16,13 @@ export function displayPosts(title, OP, votes, comments) {
     doots.textContent = votes;
 
     //reply count
-    const replies = document.createElement('div');
-    replies.textContent = comments
+    // const replies = document.createElement('div');
+    // replies.textContent = comments
 
+    posts.appendChild(header)
     posts.appendChild(div)
-    header.appendChild(p)
-    header.appendChild(doots)
-    header.appendChild(replies)
-    div.appendChild(header)
+    posts.appendChild(p)
+    posts.appendChild(doots)
+    // header.appendChild(replies)
+    // div.appendChild(header)
 }

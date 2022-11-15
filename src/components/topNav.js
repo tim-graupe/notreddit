@@ -3,11 +3,13 @@ import {
   createNewSubreddit, showPosts, showSubs
 
 } from "../firebase";
+import CurrentSubPosts from "./currentSubPosts";
+import SubmissionModal from "./submitPost";
 
 
 
-export default function TopNav() {
-
+export default function TopNav(props) {
+  const [showModal, setShowModal] = useState(false)
 
 
 
@@ -16,16 +18,11 @@ export default function TopNav() {
       <div id="logo">
         <h1 id="title">Not</h1>
         <h1 id="title2">Reddit</h1>
+        
       </div>
-      <li></li>
+      <SubmissionModal />
       <button id="signIn-btn">Sign In</button>
-      <button
-        className="nav-divs"
-        onClick={() => {
-          const form = document.getElementById("submissionForm");
-          form.style.display = "block";
-        }}
-      >
+      <button>
         New Post
       </button>
       <button
