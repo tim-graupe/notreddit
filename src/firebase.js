@@ -12,6 +12,8 @@ import {
   signOut,
 } from "firebase/auth";
 
+import { getStorage, ref } from "firebase/storage";
+
 import {
   getFirestore,
   doc,
@@ -49,7 +51,6 @@ export const db = getFirestore(app);
 //adds submission to sub
 export async function submitNewPost(subreddit, title, content) {
   const subRef = doc(db, "subreddits", subreddit);
-  const form = document.getElementById("submissionForm");
   await updateDoc(subRef, {
     Posts: arrayUnion({
       Content: content,
@@ -60,7 +61,6 @@ export async function submitNewPost(subreddit, title, content) {
       // SubmissionTime: serverTimestamp(),
     }),
   });
-  form.style.display = "none";
 }
 
 export async function showPosts(subreddit) {
@@ -83,14 +83,11 @@ export async function showPosts(subreddit) {
 }
 
 export async function showSubs() {
-  // console.log('yo')
   let subArr = [];
   const querySnapshot = await getDocs(collection(db, "subreddits"));
   querySnapshot.forEach((doc) => {
     subArr.push(doc);
   });
-
-  // return subArr;
 }
 
 export async function createNewSubreddit() {
@@ -100,14 +97,7 @@ export async function createNewSubreddit() {
   });
 }
 
-//use this for a new post in the sub collection of reddits
-//  export async function createNewSubreddit(newSub) {
-//   await setDoc(doc(db, "subreddits", newSub), {
-//     Content: null,
-//     OP: null,
-//     Replies: [],
-//     Title: "",
-//     Votes: 1
-//   })
-
-//  }
+// export async function submitImg() {
+//   const storage = getStorage();
+//   const 
+// }

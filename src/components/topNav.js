@@ -5,11 +5,12 @@ import {
 } from "../firebase";
 import CurrentSubPosts from "./currentSubPosts";
 import SubmissionModal from "./submitPost";
-
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 
 export default function TopNav(props) {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState("")
 
 
 
@@ -20,11 +21,10 @@ export default function TopNav(props) {
         <h1 id="title2">Reddit</h1>
         
       </div>
-      <SubmissionModal />
+      <Popup trigger={<button>Click</button>} position="center center">
+      <SubmissionModal props={props} test={showModal} subs={props.subs}/>
+      </Popup>
       <button id="signIn-btn">Sign In</button>
-      <button>
-        New Post
-      </button>
       <button
         id="new-sub"
         onClick={() => {
