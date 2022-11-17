@@ -48,7 +48,7 @@ function App(props) {
         return (
           <div className="sub-btns" onClick={() => {
             changeSub(sub)
-          }}>{sub}</div>
+          }} key={sub}>{sub}</div>
         )
       })}
 

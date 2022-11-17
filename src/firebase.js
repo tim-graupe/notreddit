@@ -5,14 +5,9 @@ import { initializeApp } from "firebase/app";
 import "firebase/compat/firestore";
 
 import {
-  getAuth,
-  signInWithRedirect,
-  GoogleAuthProvider,
-  getRedirectResult,
-  signOut,
+  getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut
 } from "firebase/auth";
-
-import { getStorage, ref } from "firebase/storage";
+import {  getStorage } from "firebase/storage"
 
 import {
   getFirestore,
@@ -20,11 +15,7 @@ import {
   getDoc,
   collection,
   getDocs,
-  addDoc,
-  serverTimestamp,
   setDoc,
-  query,
-  onSnapshot,
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
@@ -47,6 +38,42 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const storage = getStorage(app)
+const auth = getAuth(app)
+
+
+
+
+//sign in
+export function signIn(){
+  const provider = new GoogleAuthProvider();
+signInWithRedirect(auth, provider);
+
+getRedirectResult(auth).then((result) => {
+  const credential = GoogleAuthProvider.credentialFromResult(result);
+  const token = credential.accessTokenl
+
+  const user = result.user;
+
+}).catch((error) => {
+  const errorCode = error.code;
+  const errorMsg = error.mesage;
+  const email = error.customData.email;
+  const credential = GoogleAuthProvider.credentialFromError(error)
+})
+}
+
+
+//signout
+export function signOutUser(){
+signOut(auth).then(() => {
+  console.log('good to go')
+  // Sign-out successful.
+}).catch((error) => {
+  // An error happened.
+  console.log(error)
+});
+}
 
 //adds submission to sub
 export async function submitNewPost(subreddit, title, content) {
@@ -97,7 +124,3 @@ export async function createNewSubreddit() {
   });
 }
 
-// export async function submitImg() {
-//   const storage = getStorage();
-//   const 
-// }

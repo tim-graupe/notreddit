@@ -1,6 +1,6 @@
 import React, {  useEffect, useRef, useState } from "react";
 import {
-  createNewSubreddit, showPosts, showSubs
+  createNewSubreddit, showPosts, showSubs, signIn, signOutUser
 
 } from "../firebase";
 import CurrentSubPosts from "./currentSubPosts";
@@ -24,7 +24,7 @@ export default function TopNav(props) {
       <Popup trigger={<button>Click</button>} position="center center">
       <SubmissionModal props={props} test={showModal} subs={props.subs}/>
       </Popup>
-      <button id="signIn-btn">Sign In</button>
+      <button id="signIn-btn" onClick={() => {signIn()}}>Google</button>
       <button
         id="new-sub"
         onClick={() => {
