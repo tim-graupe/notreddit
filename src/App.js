@@ -46,9 +46,9 @@ function App(props) {
     <div className="App">
       {subList.map((sub) => {
         return (
-          <div className="sub-btns" onClick={() => {
+          <div key={sub.id} className="sub-btns" onClick={() => {
             changeSub(sub)
-          }} key={sub}>{sub}</div>
+          }} >{sub}</div>
         )
       })}
 

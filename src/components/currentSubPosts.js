@@ -51,11 +51,12 @@ export default function CurrentSubPosts(props) {
   return (
     <div className="content">
       <div id="test"><button id="back-btn" onClick={() => {goBack()}}>Back</button>
+      <button id="reply">Reply</button>
       <div id="post"></div>
       <div id="sublist">
       {posts.map((post) => {
         return (
-          <div onClick={() => handleclick(post)} key={post}>
+          <div onClick={() => handleclick(post)}>
             <h1>{post.Title}</h1>
             <p>Submitted by {post.OP}</p>
             <p>Total replies: {post.Replies.length}</p>

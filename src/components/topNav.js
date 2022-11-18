@@ -25,6 +25,7 @@ export default function TopNav(props) {
       <SubmissionModal props={props} test={showModal} subs={props.subs}/>
       </Popup>
       <button id="signIn-btn" onClick={() => {signIn()}}>Google</button>
+      <button onClick={() => {signOutUser()}}>Out</button>
       <button
         id="new-sub"
         onClick={() => {

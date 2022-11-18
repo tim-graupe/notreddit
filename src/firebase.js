@@ -54,34 +54,42 @@ getRedirectResult(auth).then((result) => {
   const token = credential.accessTokenl
 
   const user = result.user;
+    console.log(user)
 
 }).catch((error) => {
   const errorCode = error.code;
   const errorMsg = error.mesage;
   const email = error.customData.email;
   const credential = GoogleAuthProvider.credentialFromError(error)
+  console.log(email)
 })
 }
 
 
 //signout
 export function signOutUser(){
+  const user = auth.currentUser;
+
 signOut(auth).then(() => {
-  console.log('good to go')
+  // console.log('good to go')
   // Sign-out successful.
 }).catch((error) => {
   // An error happened.
   console.log(error)
 });
+console.log(user)
 }
 
 //adds submission to sub
 export async function submitNewPost(subreddit, title, content) {
+  const user = auth.currentUser;
+  console.log(user)
+
   const subRef = doc(db, "subreddits", subreddit);
   await updateDoc(subRef, {
     Posts: arrayUnion({
       Content: content,
-      OP: null,
+      OP: user.displayName,
       Replies: [],
       Title: title,
       Votes: 1,
