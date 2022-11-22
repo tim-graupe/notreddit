@@ -1,9 +1,8 @@
-import React, {  useEffect, useRef, useState } from "react";
+import React, {  useState } from "react";
 import {
-  createNewSubreddit, showPosts, showSubs, signIn, signOutUser
+  signIn, signOutUser
 
 } from "../firebase";
-import CurrentSubPosts from "./currentSubPosts";
 import SubmissionModal from "./submitPost";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -21,19 +20,11 @@ export default function TopNav(props) {
         <h1 id="title2">Reddit</h1>
         
       </div>
-      <Popup trigger={<button>Click</button>} position="center center">
+      <Popup trigger={<button>New Post</button>} position="center center">
       <SubmissionModal props={props} test={showModal} subs={props.subs}/>
       </Popup>
       <button id="signIn-btn" onClick={() => {signIn()}}>Google</button>
-      <button onClick={() => {signOutUser()}}>Out</button>
-      <button
-        id="new-sub"
-        onClick={() => {
-          createNewSubreddit();
-        }}
-      >
-        Create New Sub
-      </button>
+      <button onClick={() => {signOutUser()}}>Sign Out</button>
         <div>
         </div>
     </div>

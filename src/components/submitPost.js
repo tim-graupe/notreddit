@@ -17,7 +17,6 @@ export default function SubmissionModal(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(newPost)
         submitNewPost(newPost.Sub, newPost.Title, newPost.Content)
         setNewPost({Title: "", Content: "", Sub: ""})
     }

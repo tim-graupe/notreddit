@@ -5,12 +5,18 @@ import { initializeApp } from "firebase/app";
 import "firebase/compat/firestore";
 
 import {
-  getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut
+  getAuth,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
+  signOut,
 } from "firebase/auth";
-import {  getStorage } from "firebase/storage"
+import { getStorage } from "firebase/storage";
 
 import {
   getFirestore,
+  addDoc,
   doc,
   getDoc,
   collection,
@@ -18,6 +24,7 @@ import {
   setDoc,
   updateDoc,
   arrayUnion,
+  serverTimestamp,
 } from "firebase/firestore";
 import { displayPosts } from "./functions/displayPosts";
 
@@ -38,97 +45,102 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-export const storage = getStorage(app)
-const auth = getAuth(app)
-
-
-
+export const storage = getStorage(app);
+const auth = getAuth(app);
 
 //sign in
-export function signIn(){
+export function signIn() {
   const provider = new GoogleAuthProvider();
-signInWithRedirect(auth, provider);
+  signInWithRedirect(auth, provider);
 
-getRedirectResult(auth).then((result) => {
-  const credential = GoogleAuthProvider.credentialFromResult(result);
-  const token = credential.accessTokenl
+  getRedirectResult(auth)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessTokenl;
 
-  const user = result.user;
-    console.log(user)
-
-}).catch((error) => {
-  const errorCode = error.code;
-  const errorMsg = error.mesage;
-  const email = error.customData.email;
-  const credential = GoogleAuthProvider.credentialFromError(error)
-  console.log(email)
-})
+      const user = result.user;
+      console.log(user);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMsg = error.mesage;
+      const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      console.log(email);
+    });
 }
 
-
 //signout
-export function signOutUser(){
+export function signOutUser() {
   const user = auth.currentUser;
 
-signOut(auth).then(() => {
-  // console.log('good to go')
-  // Sign-out successful.
-}).catch((error) => {
-  // An error happened.
-  console.log(error)
-});
-console.log(user)
+  signOut(auth)
+    .then(() => {
+      // console.log('good to go')
+      // Sign-out successful.
+    })
+    .catch((error) => {
+      // An error happened.
+      console.log(error);
+    });
+  console.log(user);
 }
 
 //adds submission to sub
-export async function submitNewPost(subreddit, title, content) {
-  const user = auth.currentUser;
-  console.log(user)
-
-  const subRef = doc(db, "subreddits", subreddit);
-  await updateDoc(subRef, {
-    Posts: arrayUnion({
-      Content: content,
-      OP: user.displayName,
-      Replies: [],
-      Title: title,
-      Votes: 1,
-      // SubmissionTime: serverTimestamp(),
-    }),
+export async function submitNewPost(sub, title, content) {
+  const subref = await addDoc(collection(db, sub), {
+    Title: title,
+    Content: content,
+    Replies: [],
+    Votes: 1,
+    // Submitted: time
+  });
+  await updateDoc(subref, {
+    ID: subref.id,
   });
 }
 
 export async function showPosts(subreddit) {
-  const docRef = doc(db, "subreddits", subreddit);
-  const docSnap = await getDoc(docRef);
-  const postArr = [];
-  if (docSnap.exists()) {
-    const posts = document.getElementById("test");
-    posts.textContent = "";
-    let data = docSnap.data().Posts;
-    data.forEach((post) => {
-      displayPosts(post.Title, post.OP, post.Votes, post.Replies);
-      postArr.push(post);
-    });
-  } else {
-    console.log("404");
-  }
-
-  return postArr;
+  const querySnapshot = await getDocs(collection(db, subreddit));
+  querySnapshot.forEach((doc) => {
+    console.log(doc.data());
+  });
 }
 
 export async function showSubs() {
   let subArr = [];
   const querySnapshot = await getDocs(collection(db, "subreddits"));
   querySnapshot.forEach((doc) => {
-    subArr.push(doc);
+    subArr.push(doc.data().sub);
   });
 }
 
 export async function createNewSubreddit() {
   let newSub = prompt("Enter sub name");
   await setDoc(doc(db, "subreddits", newSub), {
-    Posts: [],
+    // sub: newSub
   });
 }
 
+//adds ID to doc
+export async function addID() {}
+
+//leave comment
+export async function leaveComment(sub, post) {
+  console.log(sub, post);
+  const subRef = doc(db, sub, post);
+
+  await updateDoc(subRef, {
+    Replies: arrayUnion({
+      Comment: "Response!",
+    }),
+  });
+}
+
+//upvote
+export async function upvote() {
+  let ref = doc(db, "subreddits", "Posts");
+  ref.forEach((doc) => {
+    console.log(doc.Title);
+  });
+}

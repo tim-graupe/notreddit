@@ -1,6 +1,6 @@
-export function displayPosts(title, OP, votes, content) {
+export function displayPosts(title, OP, votes, content, post) {
     const posts = document.getElementById('post')
-    // posts.textContent = "";
+
     const div = document.createElement('div');
     div.textContent = content
     //title
