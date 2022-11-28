@@ -12,7 +12,8 @@
 }
 
 #submit-form{
-
+  width: 75%;
+  height: 100px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

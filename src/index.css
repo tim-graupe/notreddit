@@ -71,3 +71,8 @@ text-align: left;
 #submissionForm{
   display: none;
 }
+
+#Content{
+  height: 100px;
+  width: 250px;
+}

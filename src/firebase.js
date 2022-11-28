@@ -11,8 +11,9 @@ import {
   signInWithRedirect,
   getRedirectResult,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
-import { getStorage } from "firebase/storage";
+import { getStorage, ref } from "firebase/storage";
 
 import {
   getFirestore,
@@ -59,7 +60,6 @@ export function signIn() {
       const token = credential.accessTokenl;
 
       const user = result.user;
-      console.log(user);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -88,11 +88,14 @@ export function signOutUser() {
 
 //adds submission to sub
 export async function submitNewPost(sub, title, content) {
+  const user = auth.currentUser;
+
   const subref = await addDoc(collection(db, sub), {
     Title: title,
     Content: content,
     Replies: [],
     Votes: 1,
+    OP: user.displayName,
     // Submitted: time
   });
   await updateDoc(subref, {
@@ -122,18 +125,17 @@ export async function createNewSubreddit() {
   });
 }
 
-//adds ID to doc
-export async function addID() {}
-
 //leave comment
-export async function leaveComment(sub, post) {
-  console.log(sub, post);
+export async function leaveComment(sub, post, comment) {
+  const user = auth.currentUser;
+  const name = user.displayName;
+  const reply = {name: name, reply: comment, karma: 1}
   const subRef = doc(db, sub, post);
 
   await updateDoc(subRef, {
-    Replies: arrayUnion({
-      Comment: "Response!",
-    }),
+    Replies: arrayUnion(
+      reply
+    ),
   });
 }
 
@@ -143,4 +145,16 @@ export async function upvote() {
   ref.forEach((doc) => {
     console.log(doc.Title);
   });
+}
+
+//upload file
+export async function submitURL(url) {
+  try {
+    new URL(url);
+    console.log(document.title);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 }

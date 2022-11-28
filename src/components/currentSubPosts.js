@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { db, showPosts, leaveComment } from "../firebase";
+import { db, showPosts, leaveComment, submitURL } from "../firebase";
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import ShowPost from "./showPost";
 import { displayPosts } from "../functions/displayPosts";
+import Reply from "./postReply";
 
 export default function CurrentSubPosts(props) {
   const [posts, setPosts] = useState([]);
   const [currentPost, setPost] = useState("")
   const [postOpen, setPostOpen] = useState(false)
-  const [showBack, setShowBack] = useState(false)
-  const [subList, setSubList] = useState([]);
+
   
 
   useEffect(() => {
@@ -17,11 +17,9 @@ export default function CurrentSubPosts(props) {
       if (postOpen){
         document.getElementById('sublist').style.display = 'none'
         document.getElementById('back-btn').style.display = 'block'
-        // document.getElementById('reply').style.display = 'block'
       } else {
         document.getElementById('sublist').style.display = 'block'
         document.getElementById('back-btn').style.display = 'none';
-        // document.getElementById('reply').style.display = 'none'
 
       }
     }
@@ -44,11 +42,11 @@ export default function CurrentSubPosts(props) {
   function handleclick(e){
     setPostOpen(true)
     setPost(e)
-    displayPosts(e.Title, e.OP, e.Votes, e.Content)
   }
 
   function goBack(){
     const post = document.getElementById('post')
+    setPost("")
     setPostOpen(false)
     while (post.firstChild){
       post.removeChild(post.firstChild)
@@ -63,14 +61,20 @@ export default function CurrentSubPosts(props) {
       <div id="sublist">
       {posts.map((post) => {
         return (
-          <div onClick={() => handleclick(post)}>
-            <h1  onClick={() => {console.log(posts)}}>{post.Title}</h1>
+          <div id={post} onClick={() => handleclick(post)}>
+            <h1>{post.Title}</h1>
             <p>Submitted by {post.OP}</p>
           </div>
         );
+
+
       })}
       </div>
+      {/* <div id="reply"></div> */}
+      
       </div>
+      <ShowPost title={currentPost.Title} OP={currentPost.OP} content={currentPost.Content} postID={currentPost.ID} currentSub = {props.currentSub} postOpen={postOpen}  replies = {currentPost.Replies}/>
+
     </div>
   );
 }
