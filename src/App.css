@@ -40,6 +40,10 @@
   text-align: left;
 }
 
+#name{
+  display: inline-block;
+}
+
 
 
 

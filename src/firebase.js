@@ -1,33 +1,28 @@
 import "firebase/analytics";
-import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { initializeApp } from "firebase/app";
 import "firebase/compat/firestore";
 
 import {
   getAuth,
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithRedirect,
   getRedirectResult,
   signOut,
-  onAuthStateChanged,
 } from "firebase/auth";
-import { getStorage, ref } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 
 import {
   getFirestore,
   addDoc,
   doc,
-  getDoc,
   collection,
   getDocs,
   setDoc,
   updateDoc,
   arrayUnion,
-  serverTimestamp,
+  increment
 } from "firebase/firestore";
-import { displayPosts } from "./functions/displayPosts";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -46,7 +41,7 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
+// export const storage = getStorage(app);
 const auth = getAuth(app);
 
 //sign in
@@ -96,6 +91,7 @@ export async function submitNewPost(sub, title, content) {
     Replies: [],
     Votes: 1,
     OP: user.displayName,
+    Type: 'Text'
     // Submitted: time
   });
   await updateDoc(subref, {
@@ -129,32 +125,39 @@ export async function createNewSubreddit() {
 export async function leaveComment(sub, post, comment) {
   const user = auth.currentUser;
   const name = user.displayName;
-  const reply = {name: name, reply: comment, karma: 1}
+  const pic = user.photoURL;
+  console.log(user)
+  const reply = { name: name, pic: pic, reply: comment, karma: 1 };
   const subRef = doc(db, sub, post);
 
   await updateDoc(subRef, {
-    Replies: arrayUnion(
-      reply
-    ),
+    Replies: arrayUnion(reply),
   });
 }
 
 //upvote
-export async function upvote() {
-  let ref = doc(db, "subreddits", "Posts");
-  ref.forEach((doc) => {
-    console.log(doc.Title);
-  });
+export async function upvote(sub, post) {
+  let ref = doc(db, sub, post);
+ await updateDoc(ref, {
+  Votes: increment(1)
+ })
+  
 }
 
-//upload file
-export async function submitURL(url) {
-  try {
-    new URL(url);
-    console.log(document.title);
-    return true;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
+// //upload image
+export async function addImg(sub, title, content) { 
+  const user = auth.currentUser;
+
+  const subref = await addDoc(collection(db, sub), {
+    Title: title,
+    Content: content,
+    Replies: [],
+    Votes: 1,
+    OP: user.displayName,
+    Type: 'Image'
+    // Submitted: time
+  });
+  await updateDoc(subref, {
+    ID: subref.id,
+  });
+ }

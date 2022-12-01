@@ -2,13 +2,10 @@ import TopNav from "./components/topNav";
 import "./App.css";
 import CurrentSubPosts from "./components/currentSubPosts";
 import { useEffect, useState } from "react";
-import { db, showPosts, leaveComment } from "./firebase";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import SubList from "./components/showSubList";
-import ShowPost from "./components/showPost";
+import { db } from "./firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 function App(props) {
-  const [posts, setPosts] = useState([]);
   const [currentSub, setCurrentSub] = useState("pizza");
   const [subList, setSubList] = useState([]);
 
