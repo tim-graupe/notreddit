@@ -1,13 +1,15 @@
 import TopNav from "./components/topNav";
-import "./App.css";
 import CurrentSubPosts from "./components/currentSubPosts";
 import { useEffect, useState } from "react";
-import { db } from "./firebase";
+import { db, signIn, signOutUser } from "./firebase";
 import { collection, getDocs } from "firebase/firestore";
 
+
 function App(props) {
-  const [currentSub, setCurrentSub] = useState("pizza");
+  const [currentSub, setCurrentSub] = useState("beer");
   const [subList, setSubList] = useState([]);
+  const [login, setLogin] = useState(false);
+
 
   useEffect(() => {
     let newArr = [];
@@ -20,13 +22,10 @@ function App(props) {
     };
     showSubs();
   }, []);
-
+  
   function changeSub(sub) {
     setCurrentSub(sub);
   }
-
-  // getPosts()
-
   return (
     <div className="App">
       {subList.map((sub) => {
@@ -42,10 +41,28 @@ function App(props) {
           </div>
         );
       })}
+            <button
+        id="signIn-btn"
+        onClick={() => {
+          setLogin(true);
 
+          signIn();
+        }}
+      >
+        Google
+      </button>
+      <button id="signOut-btn"
+        onClick={() => {
+          signOutUser();
+          setLogin(false);
+        }}
+      >
+        Sign Out
+      </button>
       <TopNav subs={subList} />
-
+      <div id="sub">
       <CurrentSubPosts subs={subList} currentSub={currentSub} />
+      </div>
     </div>
   );
 }

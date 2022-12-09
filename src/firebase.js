@@ -15,13 +15,18 @@ import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import {
   getFirestore,
   addDoc,
+  getDoc,
   doc,
   collection,
   getDocs,
+  limit,
   setDoc,
   updateDoc,
   arrayUnion,
-  increment
+  increment,
+  arrayRemove,
+  query,
+  orderBy
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -41,7 +46,6 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-// export const storage = getStorage(app);
 const auth = getAuth(app);
 
 //sign in
@@ -91,7 +95,7 @@ export async function submitNewPost(sub, title, content) {
     Replies: [],
     Votes: 1,
     OP: user.displayName,
-    Type: 'Text'
+    Type: "Text",
     // Submitted: time
   });
   await updateDoc(subref, {
@@ -99,12 +103,49 @@ export async function submitNewPost(sub, title, content) {
   });
 }
 
-export async function showPosts(subreddit) {
-  const querySnapshot = await getDocs(collection(db, subreddit));
-  querySnapshot.forEach((doc) => {
-    console.log(doc.data());
+// //upload image
+export async function addImg(sub, title, image) {
+  const user = auth.currentUser;
+
+  const subref = await addDoc(collection(db, sub), {
+    Title: title,
+    Content: image,
+    Replies: [],
+    Votes: 1,
+    Voters: [],
+    OP: user.displayName,
+    Type: "Image",
+    // Submitted: time
+  });
+  await updateDoc(subref, {
+    ID: subref.id,
   });
 }
+
+export async function addLink(sub, title, link) {
+  const user = auth.currentUser;
+
+  const subref = await addDoc(collection(db, sub), {
+    Title: title,
+    Content: link,
+    Replies: [],
+    Votes: 1,
+    Voters: [],
+    OP: user.displayName,
+    Type: "Image",
+    // Submitted: time
+  });
+  await updateDoc(subref, {
+    ID: subref.id,
+  });
+}
+
+// export async function showPosts(subreddit) {
+//   const querySnapshot = await getDocs(collection(db, subreddit));
+//   querySnapshot.forEach((doc) => {
+//     console.log(doc.data());
+//   });
+// }
 
 export async function showSubs() {
   let subArr = [];
@@ -126,7 +167,7 @@ export async function leaveComment(sub, post, comment) {
   const user = auth.currentUser;
   const name = user.displayName;
   const pic = user.photoURL;
-  console.log(user)
+  console.log(user);
   const reply = { name: name, pic: pic, reply: comment, karma: 1 };
   const subRef = doc(db, sub, post);
 
@@ -138,26 +179,29 @@ export async function leaveComment(sub, post, comment) {
 //upvote
 export async function upvote(sub, post) {
   let ref = doc(db, sub, post);
- await updateDoc(ref, {
-  Votes: increment(1)
- })
-  
+  let com = await getDoc(ref);
+  com.data().Voters.includes(auth.currentUser.uid)
+    ? await updateDoc(ref, {
+        Votes: increment(-1),
+        Voters: arrayRemove(auth.currentUser.uid),
+      })
+    : await updateDoc(ref, {
+        Votes: increment(1),
+        Voters: arrayUnion(auth.currentUser.uid),
+      });
 }
 
-// //upload image
-export async function addImg(sub, title, content) { 
-  const user = auth.currentUser;
-
-  const subref = await addDoc(collection(db, sub), {
-    Title: title,
-    Content: content,
-    Replies: [],
-    Votes: 1,
-    OP: user.displayName,
-    Type: 'Image'
-    // Submitted: time
-  });
-  await updateDoc(subref, {
-    ID: subref.id,
-  });
- }
+export async function downvote(sub, post) {
+  let ref = doc(db, sub, post);
+  let com = await getDoc(ref);
+  com.data().Voters.includes(auth.currentUser.uid)
+    ? await updateDoc(ref, {
+        Votes: increment(1),
+        Voters: arrayUnion(auth.currentUser.uid),
+      })
+    : await updateDoc(ref, {
+        Votes: increment(-1),
+        Voters: arrayRemove(auth.currentUser.uid),
+      });
+}
+//sort by best

@@ -24,7 +24,7 @@ export default function Reply(props) {
   return(
     <div id="submit-form">
     <form onSubmit={handleSubmit}>
-        <input type="text" id="Content" name="Content" onChange={handleChange} />
+    <textarea onSubmit={handleSubmit} onChange={handleChange} id="Content" name="Content" type="submit" rows="4" cols="50" />
         <input type="submit" value="Reply" />
         </form>
     </div>

@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { db, upvote } from "../firebase";
+import { db, upvote, downvote, sortByBest } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
+import SubmissionModal from "./submitPost";
+import SubmitImage from "./submitImage";
+import thumbs_up from '../icons/thumbs_up.png'
+import thumbs_down from '../icons/thumbs_down.png'
 import ShowPost from "./showPost";
+import { NewSubmission } from "./submissionForm";
 
 export default function CurrentSubPosts(props) {
   const [posts, setPosts] = useState([]);
@@ -26,7 +31,6 @@ export default function CurrentSubPosts(props) {
     const getPosts = async () => {
       const querySnapshot = await getDocs(collection(db, props.currentSub));
       querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
         newArr.push(doc.data());
       });
       setPosts(newArr);
@@ -34,27 +38,26 @@ export default function CurrentSubPosts(props) {
     getPosts();
   }, [props.currentSub]);
 
+  function showForm(){
+    document.getElementById("submission-form").style.display = 'block'
+    document.getElementById('sublist').style.display = 'none'
+  }
+
   function handleclick(e) {
     setPostOpen(true);
     setPost(e);
   }
-
-  function castUpvote(sub, id){
-    //TODO: add ability to check if user has already up/downvoted post. maybe create user objects for when they login and create an array of all posts they vote on. if the post id is already in this array, have the function do nothing
-  }
-
   function goBack() {
-    const post = document.getElementById("post");
     setPost("");
     setPostOpen(false);
-    while (post.firstChild) {
-      post.removeChild(post.firstChild);
-    }
-  }
 
+  }
+//TODO: set up a function to setstate of how posts will be sorted. allow a dropdown to change the sorting
   return (
     <div className="content">
-      <div id="test">
+      <button onClick={() => {
+        showForm()
+      }}id="new-post">New Post</button>
         <button
           id="back-btn"
           onClick={() => {
@@ -63,19 +66,23 @@ export default function CurrentSubPosts(props) {
         >
           Back
         </button>
-        <div id="post"></div>
         <div id="sublist">
           {posts.map((post) => {
             return (
               <div id={post}>
-                {/* <button onClick={castUpvote(props.currentSub, post.ID)}>Upvote</button> */}
                 <h1 onClick={() => handleclick(post)}>{post.Title}</h1>
+                <img className="upvote" src={thumbs_up} alt="upvote" onClick={() => upvote(props.currentSub, post.ID)} />
+                {post.Votes}
+                <img className="downvote" src={thumbs_down} alt="downvote" onClick={() => downvote(props.currentSub, post.ID)} />
                 <p>Submitted by {post.OP}</p>
               </div>
             );
           })}
         </div>
-      </div>
+
+        <div id="submission-form">
+          <NewSubmission props={props} currentSub={props.currentSub}/>
+        </div>
       <ShowPost
         title={currentPost.Title}
         OP={currentPost.OP}

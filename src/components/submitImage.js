@@ -4,18 +4,22 @@ import {
   uploadBytesResumable,
   getDownloadURL,
   getStorage,
-  getMetadata,
 } from "firebase/storage";
 import { addImg } from "../firebase";
 
-export default function SubmitImage() {
+export default function SubmitImage(props) {
   const [file, setFile] = useState("");
+  const [title, setTitle] = useState("")
   const [percent, setPercent] = useState(0);
   const storage = getStorage();
 
   function handleChange(event) {
     setFile(event.target.files[0]);
   }
+
+  function handleTitle(e){
+    setTitle({ ...title, [e.target.name]: e.target.value });
+  };
   function handleUpload() {
     if (!file) {
       alert("Please select an image first");
@@ -35,8 +39,7 @@ export default function SubmitImage() {
       (err) => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-          addImg('beer', "Duck", url)
+          addImg(props.currentSub, Object.values(title), url)
         });
       }
     );
@@ -45,6 +48,8 @@ export default function SubmitImage() {
 
   return (
     <div>
+      <p>You are submitting a link. The key to a successful submission is interesting content and a descriptive title.</p>
+      Title <input type="text" onChange={handleTitle} />
       <input type="file" accept="" onChange={handleChange} />
       <button onClick={handleUpload}>Upload</button>
     </div>

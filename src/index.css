@@ -21,6 +21,15 @@ width: 100%;
 text-align: left;
 }
 
+.upvote{
+  background-color: green;
+  max-width: 1%;
+}
+
+.downvote{
+  background-color: red;
+  max-width: 1%;
+}
 
 .sub-btns{
   background-color: black;
@@ -46,7 +55,7 @@ text-align: left;
   display: inline-block;
 }
 
-#signIn-btn {
+#signIn-btn, #signOut-btn {
   float: right;
   font-weight: normal;
   letter-spacing: 0;
@@ -58,7 +67,7 @@ text-align: left;
   -o-transition: background .2s ease-in;
 }
 
-#signIn-btn:hover {
+#signIn-btn:hover, #signOut-btn:hover{
   font-weight: normal;
   background: white;
 }
@@ -68,9 +77,10 @@ text-align: left;
   text-align: left;
 }
 
-#submissionForm{
+#submission-form{
   display: none;
 }
+
 
 #Content{
   height: 100px;

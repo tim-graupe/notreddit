@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Reply from "./postReply";
+import { ShowReplies } from "./showReplies";
 
 export default function ShowPost(props) {
   useEffect(() => {
@@ -21,22 +22,8 @@ export default function ShowPost(props) {
       <div id="reply">
         <Reply postID={props.postID} currentSub={props.currentSub} />
       </div>
-      <div id="replies">
         {/* fix below so it will only render when not undefined, code otherwise works! */}
-
-{/* 
-
-        {props.replies.map((reply) => {
-        return (
-          <div id="comment">
-          <p>{reply.reply}</p>
-          <div id="name"><img width="50%" height="50%" alt="profile pic" src={reply.pic} /><p>{reply.name}</p></div>
-          
-          
-          </div>
-        )
-      })} */}
+        <ShowReplies replies = {props.replies}/>
       </div>
-    </div>
   )
 }
